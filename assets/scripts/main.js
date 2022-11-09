@@ -69,7 +69,7 @@ async function getRecipes() {
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.
   if(localStorage.getItem('recipes') !== null){ //A1
-    return localStorage.getItem('recipes'); //A1
+     return JSON.parse(localStorage.getItem('recipes')); //A1
   } //A1
   let recipesArr = []; // A2
   //For A3, what does return entail
