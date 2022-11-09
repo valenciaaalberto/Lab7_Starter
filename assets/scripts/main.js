@@ -91,7 +91,10 @@ async function getRecipes() {
       }
     }
   });
-  //do I use promise.then to run the program essentially?
+  //Do I call something along the lines of myPromise.then(
+  //function(value) { /* code if successful */ },
+  //function(error) { /* code if some error */ }
+ //);
   return recipesArr; 
   
   /**************************/
