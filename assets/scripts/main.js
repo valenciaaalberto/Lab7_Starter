@@ -47,7 +47,7 @@ function initializeServiceWorker() {
   // B1. TODO - Check if 'serviceWorker' is supported in the current browser
   // B2. TODO - Listen for the 'load' event on the window object.
   // Steps B3-B6 will be *inside* the event listener's function created in B2
-  // B3. TODO - Register '/sw.js' as a service worker (The MDN article
+  // B3. TODO - Register './sw.js' as a service worker (The MDN article
   //            "Using Service Workers" will help you here)
   // B4. TODO - Once the service worker has been successfully registered, console
   //            log that it was successful.
@@ -73,18 +73,17 @@ async function getRecipes() {
   } //A1
   let recipesArr = []; // A2
   //For A3, what does return entail
-  //currently a string
   let promise = new Promise(async (resolve,reject) => { //A3
     for(let i = 0; i < RECIPE_URLS.length;i++){
       try{
-        let currUrl = await fetch(RECIPE_URLS[i]); //A6
-        let respectiveJsonFile = await currUrl.json(); //A7
+        let response = await fetch('RECIPE_URLS[i]'); //A6
+        //is this the appropiate way to call json? .then((response) => response.json())
+        let respectiveJsonFile = await response.json(); //A7
         recipesArr.push(respectiveJsonFile); //A8
         if(i === RECIPE_URLS.length-1){ // A9
           //on last iteration
           saveRecipesToStorage(recipesArr); // A9
         } // A9
-        //do i define the resolve method?oonline i saw it was just called
         resolve(recipesArr); //A9
       }catch(err){
         console.error(err);//A10
@@ -93,7 +92,7 @@ async function getRecipes() {
     }
   });
   //do I use promise.then to run the program essentially?
-  return promise; 
+  return recipesArr; 
   
   /**************************/
   // The rest of this method will be concerned with requesting the recipes
