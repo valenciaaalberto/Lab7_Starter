@@ -78,11 +78,19 @@ async function getRecipes() {
         let currUrl = await fetch("RECIPES_URL[i]");
         let respectiveJsonFile = await JSON.stringify(currUrl);
         recipesArr.push(respectiveJsonFile);
+        if(i === RECIPE_URLS.length-1){
+          //on last iteration
+          saveRecipesToStorage(recipesArr);
+        }
+        //do i define the resolve method?oonline i saw it was just called
+        resolve(recipesArr);
       }catch(err){
-
+        console.error(err);
+        reject(err);
       }
     }
   });
+  return recipesArr;
   /**************************/
   // The rest of this method will be concerned with requesting the recipes
   // from the network
