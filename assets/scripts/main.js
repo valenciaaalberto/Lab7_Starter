@@ -68,29 +68,33 @@ async function getRecipes() {
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.
-  if(localStorage.getItem('recipes') !== null){
-    return localStorage.getItem('recipes');
-  }
-  let recipesArr = [];
-  let promise = new Promise(async function(resolve,reject){
+  if(localStorage.getItem('recipes') !== null){ //A1
+    return localStorage.getItem('recipes'); //A1
+  } //A1
+  let recipesArr = []; // A2
+  //For A3, what does return entail
+  //currently a string
+  let promise = new Promise(async (resolve,reject) => { //A3
     for(let i = 0; i < RECIPE_URLS.length;i++){
       try{
-        let currUrl = await fetch("RECIPES_URL[i]");
-        let respectiveJsonFile = await JSON.stringify(currUrl);
-        recipesArr.push(respectiveJsonFile);
-        if(i === RECIPE_URLS.length-1){
+        let currUrl = await fetch(RECIPE_URLS[i]); //A6
+        let respectiveJsonFile = await currUrl.json(); //A7
+        recipesArr.push(respectiveJsonFile); //A8
+        if(i === RECIPE_URLS.length-1){ // A9
           //on last iteration
-          saveRecipesToStorage(recipesArr);
-        }
+          saveRecipesToStorage(recipesArr); // A9
+        } // A9
         //do i define the resolve method?oonline i saw it was just called
-        resolve(recipesArr);
+        resolve(recipesArr); //A9
       }catch(err){
-        console.error(err);
-        reject(err);
+        console.error(err);//A10
+        reject(err);//A10
       }
     }
   });
-  return recipesArr;
+  //do I use promise.then to run the program essentially?
+  return promise; 
+  
   /**************************/
   // The rest of this method will be concerned with requesting the recipes
   // from the network
