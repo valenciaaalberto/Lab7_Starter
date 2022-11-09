@@ -68,6 +68,21 @@ async function getRecipes() {
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.
+  if(localStorage.getItem('recipes') !== null){
+    return localStorage.getItem('recipes');
+  }
+  let recipesArr = [];
+  let promise = new Promise(async function(resolve,reject){
+    for(let i = 0; i < RECIPE_URLS.length;i++){
+      try{
+        let currUrl = await fetch("RECIPES_URL[i]");
+        let respectiveJsonFile = await JSON.stringify(currUrl);
+        recipesArr.push(respectiveJsonFile);
+      }catch(err){
+
+      }
+    }
+  });
   /**************************/
   // The rest of this method will be concerned with requesting the recipes
   // from the network
