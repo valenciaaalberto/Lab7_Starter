@@ -21,7 +21,7 @@ async function init() {
   let recipes;
   try {
     recipes = await getRecipes();
-   //console.log(recipes);
+    //console.log(recipes);
   } catch (err) {
     console.error(err);
   }
@@ -45,14 +45,12 @@ function initializeServiceWorker() {
   /*******************/
   // We first must register our ServiceWorker here before any of the code in
   // sw.js is executed.
-  //ServiceWorkerContainer.register();
+  //ServiceWorkerContainer.register('./sw.js');
   // B1. TODO - Check if 'serviceWorker' is supported in the current browser
+  
   if ('serviceWorker' in navigator) {
-    //does B2 go inside of here?
-    //how do I get window object?
-    window.addEventListener('load', (event) => {
-      //for line 55, the reading uses await, should we make the function asynch?
-      const registrationSw = navigator.serviceWorker.register("./sw.js");
+    window.addEventListener('load', async (event) => {
+      let registrationSw = await navigator.serviceWorker.register('./sw.js');
       if(registrationSw.active){
         console.log("Registration successful");
       }else{
@@ -60,6 +58,7 @@ function initializeServiceWorker() {
       }
     });
   }
+  
   // B2. TODO - Listen for the 'load' event on the window object.
   // Steps B3-B6 will be *inside* the event listener's function created in B2
   // B3. TODO - Register './sw.js' as a service worker (The MDN article
@@ -88,13 +87,14 @@ async function getRecipes() {
     return JSON.parse(localStorage.getItem('recipes')); //A1
   } //A1
   
+  
   let recipesArr = []; // A2
   //For A3, what does return entail
   let promise = new Promise(async (resolve,reject) => { //A3
     for(let i = 0; i < RECIPE_URLS.length;i++){
       try{
+        //console.log(RECIPE_URLS[i]);
         let response = await fetch(RECIPE_URLS[i]); //A6
-        //is this the appropiate way to call json? .then((response) => response.json())
         let respectiveJsonFile = await response.json(); //A7
         recipesArr.push(respectiveJsonFile); //A8
         if(i === RECIPE_URLS.length-1){ // A9
@@ -108,14 +108,8 @@ async function getRecipes() {
       }
     }
   });
-  //Do I call something along the lines of myPromise.then(
-  //function(value) { /* code if successful */ },
-  //function(error) { /* code if some error */ }
- //);
- //console.log(recipesArr);
- 
   return recipesArr; 
-  
+
   /**************************/
   // The rest of this method will be concerned with requesting the recipes
   // from the network
