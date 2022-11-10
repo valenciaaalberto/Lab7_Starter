@@ -9,6 +9,14 @@ self.addEventListener('install', function (event) {
     caches.open(CACHE_NAME).then(function (cache) {
       // B6. TODO - Add all of the URLs from RECIPE_URLs here so that they are
       //            added to the cache when the ServiceWorker is installed
+      cache.addAll([
+        'https://introweb.tech/assets/json/1_50-thanksgiving-side-dishes.json',
+        'https://introweb.tech/assets/json/2_roasting-turkey-breast-with-stuffing.json',
+        'https://introweb.tech/assets/json/3_moms-cornbread-stuffing.json',
+        'https://introweb.tech/assets/json/4_50-indulgent-thanksgiving-side-dishes-for-any-holiday-gathering.json',
+        'https://introweb.tech/assets/json/5_healthy-thanksgiving-recipe-crockpot-turkey-breast.json',
+        'https://introweb.tech/assets/json/6_one-pot-thanksgiving-dinner.json',
+      ]);
       return cache.addAll([]);
     })
   );
@@ -34,6 +42,20 @@ self.addEventListener('fetch', function (event) {
   /*******************************/
   // B7. TODO - Respond to the event by opening the cache using the name we gave
   //            above (CACHE_NAME)
+    event.respondWith(caches.open(CACHE_NAME).then(async (cache) => {
+      // Go to the cache first
+      const cachedResponse = await cache.match(event.request);
+      // Return a cached response if we have one
+      if (cachedResponse) {
+        //does this return the version?
+        return cachedResponse;
+      }
+      const fetchedResponse = await fetch(event.request);
+      // Add the network response to the cache for later visits
+      cache.put(event.request, fetchedResponse.clone());
+      return fetchedResponse;
+    }));
+    
   // B8. TODO - If the request is in the cache, return with the cached version.
   //            Otherwise fetch the resource, add it to the cache, and return
   //            network response.
